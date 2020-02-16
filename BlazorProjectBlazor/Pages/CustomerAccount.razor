@@ -1,0 +1,32 @@
+﻿@page "/customeraccount"
+@using Northwİnd.Blazor.Models
+@using Northwİnd.Blazor.Services.Abstract
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+@attribute [Authorize]
+<AuthorizeView>
+    <Authorized>
+        giriş yapıldı
+    </Authorized>
+    <NotAuthorized>
+        giriş yapılmadı
+    </NotAuthorized>
+</AuthorizeView>
+@code{
+
+    UserModel UserModel;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var loginUserId = await sessionStorage.GetItemAsync<long>("loginUserId");
+
+    }
+    private void SaveNewPassword()
+    {
+
+    }
+    private void SaveChanges()
+    {
+
+    }
+
+}
