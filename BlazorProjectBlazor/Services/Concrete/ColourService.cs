@@ -20,7 +20,7 @@ namespace BlazorProjectBlazor.Services.Concrete
         }
         public async   Task<List<ColourModel>> GetAll()
         {
-            var result = await _httpClient.GetJsonAsync<ResultModel>("http://localhost:21021/api/services/app/CategoriesService/GetCategories");            
+            var result = await _httpClient.GetJsonAsync<ResultModel>("http://localhost:21021/api/services/app/ColourService/getall");            
             return JsonConvert.DeserializeObject<ListResultDto<ColourModel>>(result.Result.ToString()).items.ToList();
         }
     }

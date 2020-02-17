@@ -10,7 +10,8 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Northw›nd.Blazor.Models;
 using Blazored.SessionStorage;
 using Blazored.LocalStorage;
-
+using BlazorProjectBlazor.Services.Abstract;
+using BlazorProjectBlazor.Services.Concrete;
 
 namespace BlazorProjectBlazor
 {
@@ -42,7 +43,7 @@ namespace BlazorProjectBlazor
             services.AddHttpClient<IPaymentService, PaymentService>();
             services.AddHttpClient<IUserService, UserService>();
             services.AddHttpClient<IOrderService, OrderService>();
-                       
+            services.AddHttpClient<IColourService, ColourService>();                       
             
         }
 

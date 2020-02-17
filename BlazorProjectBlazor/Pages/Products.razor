@@ -1,4 +1,4 @@
-﻿@page  "/products/{categoryid}"
+﻿@page  "/products/{categoryid:int}"
 @page  "/products"
 
 @using Northwİnd.Blazor.Models
@@ -8,6 +8,7 @@
 @inject IColourService  ColourService
 @inject NavigationManager NavigationManager
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+@inject IJSRuntime JSRuntime
 
 <div class="container">
     <div class="row">
@@ -42,56 +43,22 @@
                 </div>
             </div>
             <div class="card sidebar-menu mb-4">
-                <div class="card-header">
-                    <h3 class="h4 card-title">Brands <a href="#" class="btn btn-sm btn-danger pull-right"><i class="fa fa-times-circle"></i> Clear</a></h3>
-                </div>
                 <div class="card-body">
-                    <form>
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> Armani  (10)
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> Versace  (12)
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> Carlo Bruni  (15)
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> Jack Honey  (14)
-                                </label>
-                            </div>
-                        </div>
-                        <button class="btn btn-default btn-sm btn-primary"><i class="fa fa-pencil"></i> Apply</button>
-                    </form>
-                </div>
-            </div>
-            <div class="card sidebar-menu mb-4">
-                <div class="card-header">
-                    <h3 class="h4 card-title">Colours <a href="#" class="btn btn-sm btn-danger pull-right"><i class="fa fa-times-circle"></i> Clear</a></h3>
-                </div>
-                <div class="card-body">
-                    <form>
-                        <div class="form-group">
-                            @foreach (var color in colours)
+                    <div class="form-group">
+                        @if (colours != null)
+                        {
+                            @foreach (var colour in colours)
                             {
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox"><span class="colour white"></span> White (14)
+                                        <input @onchange="@(()=>AddColoursFilterList(colour.Id))" type="checkbox"><span class="colour white"></span> @colour.Name
                                     </label>
                                 </div>
                             }
+                        }
 
-                        </div>
-                        <button class="btn btn-default btn-sm btn-primary"><i class="fa fa-pencil"></i> Apply</button>
-                    </form>
+                    </div>
+                    <button type="button" @onclick="@FilterColour" class="btn btn-default btn-sm btn-primary"><i class="fa fa-pencil"></i> Apply</button>
                 </div>
             </div>
             <!-- *** MENUS AND FILTERS END ***-->
@@ -100,10 +67,8 @@
         <div class="col-lg-9">
             <div class="box info-bar">
                 <div class="row">
-                    <div class="col-md-12 col-lg-4 products-showing">Showing <strong>12</strong> of <strong>25</strong> products</div>
                     <div class="col-md-12 col-lg-7 products-number-sort">
                         <form class="form-inline d-block d-lg-flex justify-content-between flex-column flex-md-row">
-                            <div class="products-number"><strong>Show</strong><NavLink @onclick="@(()=>FilterProductCount(12))" class="btn btn-sm btn-primary">12</NavLink><NavLink @onclick="@(()=>FilterProductCount(24))" class="btn btn-outline-secondary btn-sm">24</NavLink><span>products</span></div>
                             <div class="products-sort-by mt-2 mt-lg-0">
                                 <strong>Sort by</strong>
                                 <select @onchange="@SortBy" Class="form-control">
@@ -167,16 +132,9 @@
                 <!-- /.products-->
             </div>
             <div class="pages">
-                <p class="loadMore"><a href="#" class="btn btn-primary btn-lg"><i class="fa fa-chevron-down"></i> Load more</a></p>
                 <nav aria-label="Page navigation example" class="d-flex justify-content-center">
                     <ul class="pagination">
-                        <li class="page-item"><a href="#" aria-label="Previous" class="page-link"><span aria-hidden="true">«</span><span class="sr-only">Previous</span></a></li>
-                        <li class="page-item active"><a href="#" class="page-link">1</a></li>
-                        <li class="page-item"><a href="#" class="page-link">2</a></li>
-                        <li class="page-item"><a href="#" class="page-link">3</a></li>
-                        <li class="page-item"><a href="#" class="page-link">4</a></li>
-                        <li class="page-item"><a href="#" class="page-link">5</a></li>
-                        <li class="page-item"><a href="#" aria-label="Next" class="page-link"><span aria-hidden="true">»</span><span class="sr-only">Next</span></a></li>
+                        <MatPaginator Length="nonFilteredProductModels.Count" PageSize="@pageSize" Page="@OnPage"></MatPaginator>
                     </ul>
                 </nav>
             </div>
@@ -185,29 +143,54 @@
     </div>
 </div>
 @code {
-    private string IdString;
+    int pageSize = 5;
+    int pageIndex = 0;
     [Parameter]
-    public string CategoryId { get; set; }
+    public int CategoryId { get; set; }
 
     List<ProductModel> productModels;
+    List<ProductModel> nonFilteredProductModels = new List<ProductModel>();
     List<ColourModel> colours;
     List<CategoryModel> categoryModels;
     List<BasketModel> basketModels = new List<BasketModel>();
+    List<int> coloursFilters = new List<int>();
+
     protected override async Task OnInitializedAsync()
     {
         categoryModels = await CategoryService.GetCategories();
         colours = await ColourService.GetAll();
+        if (CategoryId != 0)
+        {
+            nonFilteredProductModels = await ProductService.GetProductsById(CategoryId);
+            FilterProductModelByPaginator();
+        }
+
     }
-
-
     protected override async Task OnParametersSetAsync()
     {
-        // copy par value somewhere
-        IdString = CategoryId?.ToString() ?? "0";
-
-        // rest parm (set to null) by yourself
-        CategoryId = null;
-        productModels = await ProductService.GetProductsById(Convert.ToInt32(IdString));
+        if (CategoryId != 0)
+        {
+            nonFilteredProductModels = await ProductService.GetProductsById(CategoryId);
+            FilterProductModelByPaginator();
+        }
+    }
+    void FilterProductModelByPaginator()
+    {
+        productModels = nonFilteredProductModels;
+        if (pageIndex == 0)
+        {
+            productModels = nonFilteredProductModels.Take(pageSize).ToList();
+        }
+        else
+        {
+            productModels = nonFilteredProductModels.Skip(pageIndex * pageSize).ToList();
+        }
+    }
+    void OnPage(MatPaginatorPageEvent e)
+    {
+        pageIndex = e.PageIndex;
+        pageSize = e.PageSize;
+        FilterProductModelByPaginator();
     }
     void SortBy(ChangeEventArgs e)
     {
@@ -215,24 +198,35 @@
         if (val == "")
             productModels = productModels.OrderBy(x => x.Id).ToList();
         else if (val == "Fiyat")
-            productModels = productModels.OrderBy(x => x.UnitPrice).ToList();
+            productModels = productModels.OrderBy(x => x.UnitPrice - (x.UnitPrice * ((decimal)x.Discount / 100))).ToList();
         else if (val == "Ad")
             productModels = productModels.OrderBy(x => x.Name).ToList();
 
         StateHasChanged();
     }
-    void FilterProductCount(int count)
+    void AddColoursFilterList(int colourId)
     {
-        productModels = productModels.Take(count).ToList();
-        StateHasChanged();
+        if (coloursFilters.Contains(colourId))
+            coloursFilters.Remove(colourId);
+        else
+            coloursFilters.Add(colourId);
+
     }
-    void FilterColour(int colourId)
+    void FilterColour()
     {
-        productModels = productModels.Where(x => x.ColourId == colourId).ToList();
-        StateHasChanged();
+        FilterProductModelByPaginator();
+        if (coloursFilters.Count != 0)
+        {
+            List<ProductModel> productModelColour = new List<ProductModel>();
+            foreach (var colourId in coloursFilters)
+            {
+                productModelColour.AddRange(productModels.Where(x => x.ColourId == colourId).ToList());
+            }
+            productModels = productModelColour;
+            StateHasChanged();
+        }
+
     }
-
-
     void NavigateToProducts(int categoryId)
     {
         NavigationManager.NavigateTo("products/" + categoryId);
