@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Blazor.Extensions.Storage;
 using Blazored.LocalStorage;
 using Blazored.SessionStorage;
+using BlazorProjectBlazor.Models;
 
 namespace Northwİnd.Blazor.Services.Concrete
 {
@@ -53,6 +54,16 @@ namespace Northwİnd.Blazor.Services.Concrete
                 var token = await _localStorageService.GetItemAsync<string>(key: "token");                
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(scheme: "Bearer", parameter: token);
             }
+        }
+        public async Task<LoginModel> Register(RegisterModel registerModel)
+        {
+            var responseApi = await _httpClient.PostJsonAsync<ResultModel>("http://localhost:21021/api/services/app/Account/register", registerModel);
+            var canLogin = JsonConvert.DeserializeObject<RegisterOutput>(responseApi.Result.ToString());
+            if (canLogin.CanLogin==true)
+            {
+                return new LoginModel { Password = registerModel.Password, UsernameOrEmailAddress = registerModel.UserName };
+            }
+            return new LoginModel { };
         }
 
     }

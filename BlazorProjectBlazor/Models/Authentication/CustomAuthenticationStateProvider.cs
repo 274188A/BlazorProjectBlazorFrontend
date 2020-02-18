@@ -34,7 +34,7 @@ namespace Northwİnd.Blazor.Models
 
             if (accessToken != null && accessToken != string.Empty)
             {
-                var user = await _sessionStorageService.GetItemAsync<UserModel>("loginUser");
+                var user = await _localStorageService.GetItemAsync<UserModel>("loginUser");
                 identity = GetClaimsIdentity(user);
             }
             else

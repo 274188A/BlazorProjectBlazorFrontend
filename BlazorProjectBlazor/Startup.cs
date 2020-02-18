@@ -44,6 +44,7 @@ namespace BlazorProjectBlazor
             services.AddHttpClient<IUserService, UserService>();
             services.AddHttpClient<IOrderService, OrderService>();
             services.AddHttpClient<IColourService, ColourService>();                       
+            services.AddHttpClient<IUserAddressService, UserAddressService>();                       
             
         }
 

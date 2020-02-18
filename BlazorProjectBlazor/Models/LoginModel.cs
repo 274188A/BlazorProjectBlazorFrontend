@@ -8,7 +8,7 @@ namespace Northwİnd.Blazor.Models
 {
     public class LoginModel
     {
-        [Required]
+        [Required]        
         public string UsernameOrEmailAddress { get; set; }
 
         [Required]        

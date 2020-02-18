@@ -36,13 +36,16 @@
                         foreach (var category in categoryModels)
                         {
 
-                            <NavLink class="nav-link" @onclick="@(()=>NavigateToProducts(category.Id))">@category.Name.ToUpper()</NavLink>
+                            <NavLink href="" class="nav-link" @onclick="@(()=>NavigateToProducts(category.Id))">@category.Name.ToUpper()</NavLink>
 
                         }
                     }
                 </div>
             </div>
             <div class="card sidebar-menu mb-4">
+                <div class="card-header">
+                    <h3 class="h4 card-title">Colours</h3>
+                </div>
                 <div class="card-body">
                     <div class="form-group">
                         @if (colours != null)
@@ -101,8 +104,8 @@
                                         <del>$@product.UnitPrice</del>$@discountPrice
                                     </p>
                                     <p class="buttons">
-                                        <NavLink @onclick="@(()=>NavigateToProductDetail(product.Id))" class="btn btn-outline-secondary">View detail</NavLink>
-                                        <NavLink @onclick="@(()=>AddToCart(product))" class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Add to cart</NavLink>
+                                        <NavLink href="" @onclick="@(()=>NavigateToProductDetail(product.Id))" class="btn btn-outline-secondary">View detail</NavLink>
+                                        <NavLink href="" @onclick="@(()=>AddToCart(product))" class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Add to cart</NavLink>
                                     </p>
                                 </div>
                                 <!-- /.text-->

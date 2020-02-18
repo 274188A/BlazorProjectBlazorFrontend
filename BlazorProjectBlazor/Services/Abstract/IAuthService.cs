@@ -1,4 +1,5 @@
-﻿using Northwİnd.Blazor.Models;
+﻿using BlazorProjectBlazor.Models;
+using Northwİnd.Blazor.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace Northwİnd.Blazor.Services
 {
     public interface IAuthService
     {
-        Task<UserModel> Login(LoginModel loginModel);        
+        Task<UserModel> Login(LoginModel loginModel);
+        Task<LoginModel> Register(RegisterModel registerModel);
     }
 }

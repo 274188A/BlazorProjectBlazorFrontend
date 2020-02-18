@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlazorProjectBlazor.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace Northwİnd.Blazor.Models
         public DateTime CreationTime { get; set; }
 
         public string[] RoleNames { get; set; }
+        public UserAddressModel UserAddress { get; set; }
 
     }
 }

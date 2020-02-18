@@ -22,10 +22,10 @@
                 {
                     foreach (var category in categoryModels)
                     {
-                        <li class="nav-item"><NavLink class="nav-link" @onclick="@(()=>NavigateToProducts(category.Id))">@category.Name</NavLink></li>
+                        <li class="nav-item"><NavLink class="nav-link" href="" @onclick="@(()=>NavigateToProducts(category.Id))">@category.Name</NavLink></li>
                     }
                 }
-                <li class="nav-item"><NavLink class="nav-link" @onclick="NavigateToCustomerOrders">Hesabım</NavLink></li>
+                <li class="nav-item"><NavLink class="nav-link" href="" @onclick="NavigateToCustomerOrders">Hesabım</NavLink></li>
             </ul>
 
             <div class="navbar-buttons d-flex justify-content-end">
@@ -47,7 +47,7 @@
                     </div>
                 </MatAutocompleteList>                
 
-                    <NavLink class="btn btn-primary"@onclick="@NavigateToProductDetail" ><i class="fa fa-search"></i></NavLink>
+                    <NavLink href="" class="btn btn-primary"@onclick="@NavigateToProductDetail" ><i class="fa fa-search"></i></NavLink>
 
             </div>
         </form>
