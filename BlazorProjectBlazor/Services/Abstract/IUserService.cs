@@ -10,6 +10,7 @@ namespace Northwİnd.Blazor.Services.Abstract
     public interface IUserService
     {
         Task<UserModel> Get(int id);
-        Task<bool> ChangePassword(ChangePasswordDto changePasswordDto);
+        Task ChangePassword(ChangePasswordDto changePasswordDto);
+        Task<UserModel> UpdateUser(UserModel userModel); 
     }
 }

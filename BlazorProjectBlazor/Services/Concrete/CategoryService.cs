@@ -19,7 +19,7 @@ namespace Northwİnd.Blazor.Services.Concrete
 
         public async Task<List<CategoryModel>> GetCategories()
         {
-            var result= await _httpClient.GetJsonAsync<ResultModel>("http://localhost:21021/api/services/app/CategoriesService/GetCategories");
+            var result= await _httpClient.GetJsonAsync<ResultModel>("/api/services/app/CategoriesService/GetCategories");
             var category = JsonConvert.DeserializeObject<ListResultDto<CategoryModel>>(result.Result.ToString());                    
             return category.items.ToList();
         }

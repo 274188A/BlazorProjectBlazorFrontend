@@ -12,6 +12,10 @@ using Blazored.SessionStorage;
 using Blazored.LocalStorage;
 using BlazorProjectBlazor.Services.Abstract;
 using BlazorProjectBlazor.Services.Concrete;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System;
+using MatBlazor;
 
 namespace BlazorProjectBlazor
 {
@@ -27,25 +31,42 @@ namespace BlazorProjectBlazor
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
-        {
+        {            
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
             
             services.AddBlazoredSessionStorage();
             services.AddBlazoredLocalStorage();
+            HttpClient httpClient = new HttpClient()
+            {
+                BaseAddress = new Uri("http://localhost:21021"),
+            };            
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            services.AddSingleton<HttpClient>(httpClient);
             
-            services.AddHttpClient<IAuthService, AuthService>();            
-            services.AddHttpClient<ICategoryService, CategoryService>();
-            services.AddHttpClient<IProductService, ProductService>();
-            services.AddHttpClient<ICountryService, CountryService>();
-            services.AddHttpClient<ICargoService, CargoService>();
-            services.AddHttpClient<IPaymentService, PaymentService>();
-            services.AddHttpClient<IUserService, UserService>();
-            services.AddHttpClient<IOrderService, OrderService>();
-            services.AddHttpClient<IColourService, ColourService>();                       
-            services.AddHttpClient<IUserAddressService, UserAddressService>();                       
-            
+            services.AddScoped<IAuthService, AuthService>();            
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICountryService, CountryService>();
+            services.AddScoped<ICargoService, CargoService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IColourService, ColourService>();                       
+            services.AddScoped<IUserAddressService, UserAddressService>();
+
+
+            services.AddMatToaster(config =>
+            {
+                config.Position = MatToastPosition.BottomRight;
+                config.PreventDuplicates = true;
+                config.NewestOnTop = true;
+                config.ShowCloseButton = true;
+                config.MaximumOpacity = 95;
+                config.VisibleStateDuration = 3000;
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

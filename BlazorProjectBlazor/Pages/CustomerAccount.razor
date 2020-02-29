@@ -3,6 +3,7 @@
 @using Northwİnd.Blazor.Services.Abstract
 @using BlazorProjectBlazor.Models.AccountUpdate
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 @inject IUserAddressService UserAddressService
 @inject IUserService UserService
 @attribute [Authorize]
@@ -59,18 +60,21 @@
                     </div>
                 </EditForm>
                 <h3 class="mt-5">Personal details</h3>
-                <form>
+                <EditForm Model="UserModel" OnValidSubmit="SaveChanges">
+                    <DataAnnotationsValidator />
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="firstname">Firstname</label>
-                                <input id="firstname" type="text" class="form-control">
+                                <InputText Class="form-control" @bind-Value="@UserModel.Name" />
+                                <ValidationMessage For="@(()=>UserModel.Name)" />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="lastname">Lastname</label>
-                                <input id="lastname" type="text" class="form-control">
+                                <InputText Class="form-control" @bind-Value="@UserModel.Surname" />
+                                <ValidationMessage For="@(()=>UserModel.Surname)" />
                             </div>
                         </div>
                     </div>
@@ -78,14 +82,25 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="company">Company</label>
-                                <input id="company" type="text" class="form-control">
+                                <label for="company">UserName</label>
+                                <InputText Class="form-control" @bind-Value="@UserModel.UserName" />
+                                <ValidationMessage For="@(()=>UserModel.UserName)" />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="street">Street</label>
-                                <input id="street" type="text" class="form-control">
+                                <label for="street">EmailAddress</label>
+                                <InputText Class="form-control" @bind-Value="@UserModel.EmailAddress" />
+                                <ValidationMessage For="@(()=>UserModel.EmailAddress)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="street">PhoneNumber</label>
+                                <InputText Class="form-control" @bind-Value="@UserModel.PhoneNumber" />
+                                <ValidationMessage For="@(()=>UserModel.PhoneNumber)" />
                             </div>
                         </div>
                     </div>
@@ -93,68 +108,66 @@
                     <div class="row">
                         <div class="col-md-6 col-lg-3">
                             <div class="form-group">
-                                <label for="city">Company</label>
-                                <input id="city" type="text" class="form-control">
+                                <label for="city">Address</label>
+                                <InputText Class="form-control" @bind-Value="@UserModel.UserAddress.Address" />
+                                <ValidationMessage For="@(()=>UserModel.UserAddress.Address)" />
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-3">
                             <div class="form-group">
-                                <label for="zip">ZIP</label>
-                                <input id="zip" type="text" class="form-control">
+                                <label for="zip">City</label>
+                                <InputText Class="form-control" @bind-Value="@UserModel.UserAddress.City" />
+                                <ValidationMessage For="@(()=>UserModel.UserAddress.City)" />
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-3">
                             <div class="form-group">
                                 <label for="state">State</label>
-                                <select id="state" class="form-control"></select>
+                                <InputText Class="form-control" @bind-Value="@UserModel.UserAddress.State" />
+                                <ValidationMessage For="@(()=>UserModel.UserAddress.State)" />
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-3">
                             <div class="form-group">
                                 <label for="country">Country</label>
-                                <select id="country" class="form-control"></select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="phone">Telephone</label>
-                                <input id="phone" type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input id="email" type="text" class="form-control">
+                                <InputText Class="form-control" @bind-Value="@UserModel.UserAddress.Country" />
+                                <ValidationMessage For="@(()=>UserModel.UserAddress.Country)" />
                             </div>
                         </div>
                         <div class="col-md-12 text-center">
                             <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save changes</button>
                         </div>
                     </div>
-                </form>
+                </EditForm>
             </div>
         </div>
     </div>
 </div>
 @code{
 
-    UserModel UserModel;
-    UserAddressModel userAddressModel;
+    UserModel UserModel=new UserModel();
     ChangePasswordDto changePasswordDto=new ChangePasswordDto();
 
     protected async override Task OnInitializedAsync()
     {
-        var loginUserId = await sessionStorage.GetItemAsync<long>("loginUserId");
-        UserModel = await sessionStorage.GetItemAsync<UserModel>("loginUser");
-        userAddressModel = await UserAddressService.GetUserAddressByUserId(loginUserId);
+        UserModel = await localStorage.GetItemAsync<UserModel>("loginUser");
+        UserModel.UserAddress = await UserAddressService.GetUserAddressByUserId(UserModel.Id);
     }
     public async Task SaveNewPassword()
     {
-        var isSuccess = await UserService.ChangePassword(changePasswordDto);
+        await UserService.ChangePassword(changePasswordDto);
+        changePasswordDto = new ChangePasswordDto();
+        StateHasChanged();
     }
-    private void SaveChanges()
+    private async Task SaveChanges()
     {
-
+        var resultUpdateUser= await UserService.UpdateUser(UserModel);
+        await UserAddressService.UpdateUserAddress(UserModel.UserAddress);
+        if (resultUpdateUser.EmailAddress!=null)
+        {
+            await localStorage.SetItemAsync("loginUser",resultUpdateUser);
+            StateHasChanged();
+        }                
     }
 
 }

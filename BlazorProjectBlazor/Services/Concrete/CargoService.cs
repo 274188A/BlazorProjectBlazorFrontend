@@ -19,21 +19,12 @@ namespace Northwİnd.Blazor.Services.Concrete
         public CargoService(HttpClient httpClient, ILocalStorageService localStorageService)
         {
             _localStorageService = localStorageService;
-            _httpClient = httpClient;
-            SetAuthorizationHeader();
+            _httpClient = httpClient;            
         }
         public async Task<List<Cargo>> GetCargos()
         {
-            var result = await _httpClient.GetJsonAsync<ResultModel>("http://localhost:21021/api/services/app/cargoservice/getcargos");
+            var result = await _httpClient.GetJsonAsync<ResultModel>("/api/services/app/cargoservice/getcargos");
             return JsonConvert.DeserializeObject<ListResultDto<Cargo>>(result.Result.ToString()).items.ToList();
-        }
-        private async Task SetAuthorizationHeader()
-        {
-            if (!_httpClient.DefaultRequestHeaders.Contains(name: "Authorization"))
-            {
-                var token = await _localStorageService.GetItemAsync<string>(key: "token");
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(scheme: "Bearer", parameter: token);
-            }
         }
     }
 }

@@ -2,6 +2,7 @@
 @using Northwİnd.Blazor.Models
 @using Northwİnd.Blazor.Services.Abstract
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 @inject NavigationManager NavigationManager
 @inject ICountryService CountryService
 @inject IOrderService OrderService
@@ -141,7 +142,7 @@
     }
     async Task ApplyOrder()
     {
-        var loginUserId = await sessionStorage.GetItemAsync<long>("loginUserId");
+        var loginUserId = await localStorage.GetItemAsync<long>("loginUserId");
         orderModel.Status = "Order was placed";
         orderModel.UserId = loginUserId;
         orderModel.Total = Total;

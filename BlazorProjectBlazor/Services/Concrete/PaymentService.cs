@@ -19,7 +19,7 @@ namespace Northwİnd.Blazor.Services.Concrete
         }
         public async Task<List<Payment>> GetPayments()
         {
-            var result = await _httpClient.GetJsonAsync<ResultModel>("http://localhost:21021/api/services/app/Paymentservice/getPayments");
+            var result = await _httpClient.GetJsonAsync<ResultModel>("/api/services/app/Paymentservice/getPayments");
             return JsonConvert.DeserializeObject<ListResultDto<Payment>>(result.Result.ToString()).items.ToList();
         }
     }

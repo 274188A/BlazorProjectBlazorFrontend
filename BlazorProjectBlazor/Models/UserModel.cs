@@ -23,6 +23,10 @@ namespace Northwİnd.Blazor.Models
         [Required]
         [EmailAddress]        
         public string EmailAddress { get; set; }
+        [MaxLength(32)]
+        [MinLength(11)]
+        [Required]
+        public string PhoneNumber { get; set; }
 
         public bool IsActive { get; set; }
 
@@ -34,6 +38,10 @@ namespace Northwİnd.Blazor.Models
 
         public string[] RoleNames { get; set; }
         public UserAddressModel UserAddress { get; set; }
+        public UserModel()
+        {
+            UserAddress = new UserAddressModel();
+        }
 
     }
 }

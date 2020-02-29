@@ -19,7 +19,7 @@ namespace Northwİnd.Blazor.Services.Concrete
         }
         public async Task<List<Country>> GetCountries()
         {
-            var result = await _httpClient.GetJsonAsync<ResultModel>("http://localhost:21021/api/services/app/countryservice/getcountries");
+            var result = await _httpClient.GetJsonAsync<ResultModel>("/api/services/app/countryservice/getcountries");
             return JsonConvert.DeserializeObject<ListResultDto<Country>>(result.Result.ToString()).items.ToList();
         }
     }

@@ -9,5 +9,6 @@ namespace BlazorProjectBlazor.Services.Abstract
     public interface IUserAddressService
     {
         Task<UserAddressModel> GetUserAddressByUserId(long id);
+        Task<UserAddressModel> UpdateUserAddress(UserAddressModel userAddressModel);
     }
 }

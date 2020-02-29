@@ -2,7 +2,7 @@
 @using Northwİnd.Blazor.Services.Abstract
 @using Northwİnd.Blazor.Models
 @inject IOrderService OrderService
-@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 @inject NavigationManager NavigationManager
 @attribute [Authorize]
 <div class="container">
@@ -73,7 +73,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var userId = await sessionStorage.GetItemAsync<long>("loginUserId");
+        var userId = await localStorage.GetItemAsync<long>("loginUserId");
         ordersByUserIdResultDtos = await OrderService.GetOrdersByUserId(userId);
     }
     private void NavigateToCustomerOrder(int orderId)

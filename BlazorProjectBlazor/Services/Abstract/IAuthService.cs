@@ -9,7 +9,8 @@ namespace Northwİnd.Blazor.Services
 {
     public interface IAuthService
     {
-        Task<UserModel> Login(LoginModel loginModel);
-        Task<LoginModel> Register(RegisterModel registerModel);
+        Task Login(LoginModel loginModel);
+        Task Register(RegisterModel registerModel);
+        Task Logout();
     }
 }

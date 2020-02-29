@@ -20,7 +20,12 @@ namespace BlazorProjectBlazor.Services.Concrete
         }
         public async Task<UserAddressModel> GetUserAddressByUserId(long id)
         {
-            var result = await _httpClient.GetJsonAsync<ResultModel>("http://localhost:21021/api/services/app/UserAddressService/GetByUserId?Id="+id);
+            var result = await _httpClient.GetJsonAsync<ResultModel>("/api/services/app/UserAddressService/GetByUserId?Id="+id);
+            return JsonConvert.DeserializeObject<UserAddressModel>(result.Result.ToString());
+        }
+        public async Task<UserAddressModel> UpdateUserAddress(UserAddressModel userAddressModel)
+        {
+            var result = await _httpClient.PutJsonAsync<ResultModel>("/api/services/app/UserAddressService/Update" , userAddressModel);
             return JsonConvert.DeserializeObject<UserAddressModel>(result.Result.ToString());
         }
     }

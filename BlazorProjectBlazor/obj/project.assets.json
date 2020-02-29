@@ -561,23 +561,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\konto\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\lenovo\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\konto\\Desktop\\Kod Dökümanları\\BlazorProject.Blazor\\BlazorProjectBlazor\\BlazorProjectBlazor.csproj",
+      "projectUniqueName": "C:\\Users\\lenovo\\Desktop\\BlazorProjectBlazorFrontend\\BlazorProjectBlazor\\BlazorProjectBlazor.csproj",
       "projectName": "BlazorProjectBlazor",
-      "projectPath": "C:\\Users\\konto\\Desktop\\Kod Dökümanları\\BlazorProject.Blazor\\BlazorProjectBlazor\\BlazorProjectBlazor.csproj",
-      "packagesPath": "C:\\Users\\konto\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\konto\\Desktop\\Kod Dökümanları\\BlazorProject.Blazor\\BlazorProjectBlazor\\obj\\",
+      "projectPath": "C:\\Users\\lenovo\\Desktop\\BlazorProjectBlazorFrontend\\BlazorProjectBlazor\\BlazorProjectBlazor.csproj",
+      "packagesPath": "C:\\Users\\lenovo\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\lenovo\\Desktop\\BlazorProjectBlazorFrontend\\BlazorProjectBlazor\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\konto\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

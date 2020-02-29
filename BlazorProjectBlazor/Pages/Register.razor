@@ -2,10 +2,11 @@
 @using Northwİnd.Blazor.Models
 @using Northwİnd.Blazor.Services
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IAuthService AuthService
-
+@inject IMatToaster Toaster
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
@@ -63,7 +64,7 @@
                 <p class="lead">Already our customer?</p>
                 <hr>
                 <EditForm Model="loginModel" OnValidSubmit="@HandleLogin">
-                    <DataAnnotationsValidator/>
+                    <DataAnnotationsValidator />
                     <div class="form-group">
                         <label for="email">UsernameOrEmailAddress</label>
                         <InputText Class="form-control" @bind-Value="@loginModel.UsernameOrEmailAddress" />
@@ -88,23 +89,10 @@
     public string LoginMesssage { get; set; }
     private async Task HandleLogin()
     {
-        var userModel = await AuthService.Login(loginModel);
-
-        if (userModel.EmailAddress != null)
-        {
-            await sessionStorage.SetItemAsync("loginUser", userModel);
-            await sessionStorage.SetItemAsync("loginUserId", userModel.Id);
-            ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsAuthenticated(userModel);
-            NavigationManager.NavigateTo("/");
-        }
-        else
-        {
-            LoginMesssage = "Invalid username or password";
-        }
+       await AuthService.Login(loginModel);
     }
     private async Task HandleRegister()
     {
-        loginModel=await AuthService.Register(registerModel);
-        await HandleLogin();
+        await AuthService.Register(registerModel);        
     }
 }

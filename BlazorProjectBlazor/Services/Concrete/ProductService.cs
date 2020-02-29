@@ -22,19 +22,19 @@ namespace Northwİnd.Blazor.Services.Concrete
         public async Task<List<ProductModel>> GetProductsById(int categoryId)
         {
 
-            var result = await _httpClient.GetJsonAsync<ResultModel>("http://localhost:21021/api/services/app/productservice/getallbycategoryId?Id="+categoryId);
+            var result = await _httpClient.GetJsonAsync<ResultModel>("/api/services/app/productservice/getallbycategoryId?Id="+categoryId);
             return JsonConvert.DeserializeObject<ListResultDto<ProductModel>>(result.Result.ToString()).items.ToList();
         }
 
         public async Task<ProductModel> GetProductById(int productId)
         {
-            var result = await _httpClient.GetJsonAsync<ResultModel>("http://localhost:21021/api/services/app/productservice/get?Id=" + productId);
+            var result = await _httpClient.GetJsonAsync<ResultModel>("/api/services/app/productservice/get?Id=" + productId);
             return JsonConvert.DeserializeObject<ProductModel>(result.Result.ToString());
         }
 
         public async Task<List<ProductModel>> GetAll()
         {
-            var result = await _httpClient.GetJsonAsync<ResultModel>("http://localhost:21021/api/services/app/productservice/getall");
+            var result = await _httpClient.GetJsonAsync<ResultModel>("/api/services/app/productservice/getall");
             return JsonConvert.DeserializeObject<ListResultDto<ProductModel>>(result.Result.ToString()).items.ToList();
         }
     }

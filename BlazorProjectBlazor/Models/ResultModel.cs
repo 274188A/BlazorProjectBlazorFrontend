@@ -8,5 +8,6 @@ namespace Northwİnd.Blazor.Models
     public class ResultModel
     {
         public object Result { get; set; }
+        public object Error { get; set; }
     }
 }

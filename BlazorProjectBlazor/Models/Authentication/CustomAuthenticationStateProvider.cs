@@ -19,8 +19,7 @@ namespace Northwİnd.Blazor.Models
 
         public CustomAuthenticationStateProvider(ILocalStorageService localStorageService, ISessionStorageService sessionStorageService,
             IUserService userService)
-        {
-            //throw new Exception("CustomAuthenticationStateProviderException");
+        {            
             _sessionStorageService = sessionStorageService;
             _localStorageService = localStorageService;
             _userService = userService;
@@ -47,7 +46,6 @@ namespace Northwİnd.Blazor.Models
             return await Task.FromResult(new AuthenticationState(claimsPrincipal));
         }
         
-
         public void MarkUserAsAuthenticated(UserModel user)
         {
 
@@ -60,7 +58,8 @@ namespace Northwİnd.Blazor.Models
 
         public async void MarkUserAsLoggedOut()
         {
-            await _localStorageService.RemoveItemAsync("token");
+            await _localStorageService.ClearAsync();
+            await _sessionStorageService.ClearAsync();
 
             var identity = new ClaimsIdentity();
 
